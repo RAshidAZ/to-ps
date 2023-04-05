@@ -1,0 +1,14 @@
+{
+  "name": "to-ps",
+  "version": "1.0.0",
+  "description": "APIs for todo and posts.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cutshort"
+  ],
+  "author": "RAshidAZ",
+  "license": "ISC"
+}
