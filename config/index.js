@@ -1,7 +1,8 @@
 // Common Environment Variables
 const commonVariables = {
     APP_PORT: '7000',
-    MONGODB_CON_STRING: 'mongodb://localhost/cutshort-db'
+    MONGODB_CON_STRING: 'mongodb://localhost/cutshort-db',
+    PASS_SALT_STATIC: 'CUT#dSDFeFenyL2jaSDasdaeFenyL2jas@766sar7^^#&W^FSBGg7dBG7q3FSQ#SHORT',
 }
 
 //setting the common variables
