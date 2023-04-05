@@ -1,5 +1,8 @@
 const crypto = require('crypto');
+
+const config = require('../config/index');
 const Users = require('../models/user');
+
 
 // Seeding User...........
 const salt = crypto.randomBytes(16).toString('base64')
