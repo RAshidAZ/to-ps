@@ -8,7 +8,7 @@ let postSchema = new Schema({
 
     content: String,
     postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
-    comment: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
     isDelete: { type: Boolean, default: false }
 
 }, { minimize: false, timestamps: true }); // Minimize : false --> It stores empty objects.
