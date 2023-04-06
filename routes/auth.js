@@ -23,12 +23,12 @@ router.post('/v1/user/login', function (req, res, next) {
     });
 });
 
-/* POST user logins. */
-router.post('/v1/user/login', function (req, res, next) {
+/* POST user signup. */
+router.post('/v1/user/signup', function (req, res, next) {
     let data = req.body;
     // data.req = req.data;
     console.log(data);
-    auth.userLogin(data, function (err, response) {
+    auth.userSignup(data, function (err, response) {
         let status = 0;
         if (err) {
             console.log(err);

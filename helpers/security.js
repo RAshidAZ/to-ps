@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 /**
@@ -77,3 +78,53 @@ const comparePassword = function (plaintextInput, hash, salt, cb) {
     }
 };
 exports.comparePassword = comparePassword;
+
+
+/**
+ * The function validates if the password and confirm password match.
+ * @param password - The password parameter is a string that represents the password that the user
+ * wants to set.
+ * @param confirmPassword - The `confirmPassword` parameter is a string that represents the user's
+ * confirmation of their chosen password. It is used to verify that the user has entered the same
+ * password twice and to ensure that the password is correct.
+ * @returns The function `validatePassword` returns a boolean value (`true` or `false`) depending on
+ * whether the `password` and `confirmPassword` parameters are equal. If they are equal, the function
+ * returns `true`, otherwise it returns `false`.
+ */
+const validatePassword = function (password, confirmPassword) {
+    if (password === confirmPassword) {
+        return true
+    }else{
+        return false
+    }
+}
+exports.validatePassword = validatePassword
+
+/**
+ * Function to generates a password hash and salt using the plaintext input and
+ * a random salt.
+ * @param plaintext - The plaintext is the password that needs to be hashed and salted.
+ * @param res - The `res` parameter is not used in the `generatePassword` function and can be removed.
+ * @param cb - cb stands for "callback function". It is a function that is passed as an argument to
+ * another function and is called back (executed) by that function when it has completed its task. In
+ * this case, the generatePassword function takes a plaintext password, generates a salt, and uses the
+ * pbk
+ * @returns The `generatePassword` function is returning an object with two properties: `hash` and
+ * `salt`. The `hash` property contains the hashed password generated using the `pbkdf2Sync` function,
+ * and the `salt` property contains a randomly generated salt used in the hashing process. The function
+ * also takes in two parameters: `plaintext` (the password to be hashed) and `res
+ */
+const generatePassword = function(plaintext, res, cb) {
+    if (!cb) {
+        cb = res
+    }
+    const salt = crypto.randomBytes(16).toString('base64')
+    const randomSalt = Buffer(salt,'base64');
+    const hash = crypto.pbkdf2Sync(plaintext, randomSalt, 10000, 64, 'sha1').toString('base64');
+    
+    return cb(null, {
+        hash: hash,
+        salt: salt
+    })
+};
+exports.generatePassword = generatePassword;
