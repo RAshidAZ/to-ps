@@ -6,18 +6,30 @@ const addTodo = function (data, response, cb) {
     if (!cb) {
         cb = response;
     }
-    if (!data.title) {
-        return cb(sendResponse(400, null, "addTodo", null));
+    if (!data.todos || !data.todos.length) {
+        return cb(sendResponse(400, "Provide todo lists", "addTodo", null));
     }
-    let insertTodo = data
-    insertTodo.addedBy = data.authUser.id
-    Todo.create(insertTodo, (err, result) => {
+    if(data.todos.length > 10){
+        return cb(sendResponse(400, "Not allowed to add more than 10 todo at a time", "addTodo", null));
+    }
+    let insertTodoLists = [];
+
+    for(let i in data.todos) {
+        let todo = data.todos[i];
+        if(!todo.title){
+            return cb(sendResponse(400, "Provide todo lists", "addTodo", null));
+        }
+        todo.addedBy = data.authUser.id
+        insertTodoLists.push(todo);
+    }
+    
+    Todo.create(insertTodoLists, (err, result) => {
         if (err) {
             console.log('----Error in adding todo: ' + err)
             return cb(sendResponse(500, null, "addTodo", null));
         }
         console.log('------------------------------------------------------', result);
-        return cb(null, sendResponse(200, "Todo added", "addTodo", null))
+        return cb(null, sendResponse(200, "Todo added successfully!", "addTodo", null))
     })
 }
 exports.addTodo = addTodo;
