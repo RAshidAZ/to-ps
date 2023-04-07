@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-
+const Users = require('../models/user');
 /**
  * It takes in a data object, a key, and a callback function. It then uses the jsonwebtoken library to
  * encrypt the data object using the key and the callback function
@@ -128,3 +128,26 @@ const generatePassword = function(plaintext, res, cb) {
     })
 };
 exports.generatePassword = generatePassword;
+
+const verifyDecryptedData = function(decryptedData, response, cb) {
+    if(!cb){
+        cb = response
+    }
+    let findData = {
+        email: decryptedData.email,
+        role: decryptedData.role
+    };
+    Users.findOne(findData, (err, user)=>{
+        if(err){
+            return cb({err, message: "Something went wrong!"});
+        }
+        if(!user){
+            return cb({message: "No user found"})
+        }
+        if(user.isBlocked){
+            return cb({message: "User blocked"})
+        }
+        return cb(null, user)
+    })
+}
+exports.verifyDecryptedData = verifyDecryptedData;
