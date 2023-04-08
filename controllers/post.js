@@ -86,6 +86,50 @@ const getAllPostList = function (data, response, cb) {
 }
 exports.getAllPostList = getAllPostList;
 
+const getSpecifcPostDetails = function (data, response, cb) {
+    if (!cb) {
+        cb = response;
+    }
+    if(!data.postId){
+        return cb(sendResponse(400, null, "getSpecifcPostDetails", null));
+    }
+    let findPost = {
+        isDelete: false,
+        _id: data.postId
+    }
+    let populateArr = [
+        {
+            path: 'postedBy',
+            model: 'user',
+            select: 'name email'
+        },
+        { 
+            path: 'comments', 
+            model: 'comment',
+            populate: {
+                path: 'commentedBy',
+                model: 'user',
+                select: 'name email'
+            } 
+        }
+    ]
+    Post.find(findPost)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .populate(populateArr)
+    .exec((err, post) => {
+        if (err) {
+            return cb(sendResponse(500, null, "getSpecifcPostDetails", null));
+        }
+        // console.log('-----ß-------------------------------------------------', result);
+        
+        return cb(null, sendResponse(200, "Post found", "getSpecifcPostDetails", post))
+    })
+    
+}
+exports.getSpecifcPostDetails = getSpecifcPostDetails;
+
 const updatePost = function (data, response, cb) {
     if (!cb) {
         cb = response;

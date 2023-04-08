@@ -27,11 +27,27 @@ router.post('/v1/add', authenticator, function (req, res, next) {
     });
 });
 
-/* Ged post. */
+/* Get post. */
 router.get('/v1/all', authenticator, function (req, res, next) {
-    let data = req.body;
+    let data = req.query;
     data.authUser = req.authUser;
     post.getAllPostList(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            console.log(err);
+            status = err.status;
+            return res.status(status).send(err);
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
+
+/* Get post. */
+router.get('/v1/:postId', authenticator, function (req, res, next) {
+    let data = req.params;
+    data.authUser = req.authUser;
+    post.getSpecifcPostDetails(data, function (err, response) {
         let status = 0;
         if (err) {
             console.log(err);

@@ -29,7 +29,7 @@ router.post('/v1/add', authenticator, function (req, res, next) {
 
 /* Ged todo. */
 router.get('/v1/all', authenticator, function (req, res, next) {
-    let data = req.body;
+    let data = req.query;
     data.authUser = req.authUser;
     todo.getAllTodoList(data, function (err, response) {
         let status = 0;
