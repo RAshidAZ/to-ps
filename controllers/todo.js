@@ -40,6 +40,7 @@ const getAllTodoList = function (data, response, cb) {
     }
     let findTodo = {
         isDelete: false,
+        addedBy: data.authUser.id
     }
     Todo.find(findTodo, (err, result) => {
         if (err) {
