@@ -41,6 +41,9 @@ const getAllPostList = function (data, response, cb) {
     if (data.currentPage) {
         skip = data.currentPage > 0 ? ((data.currentPage - 1) * limit) : 0;
     }
+    if(data.search){
+        findTodo.content = { $regex : data.search, $options : 'i'}
+    }
     Post.countDocuments(findPost, (errC, count)=>{
         if (errC) {
             return cb(sendResponse(500, null, "getAllPostList", null));
