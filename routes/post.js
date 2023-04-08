@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-
 //  Middleware
 const authenticator = require('../middlewares/authenticator')
+const rateLimiter = require('../middlewares/rateLimiter')
 
 /* Controllers */
 const post = require('../controllers/post');
+
+router.use(rateLimiter(10, 100))
 
 /* Add post. */
 router.post('/v1/add', authenticator, function (req, res, next) {
