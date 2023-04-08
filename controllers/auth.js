@@ -166,7 +166,7 @@ const registerUser = async function (data, response, cb) {
     let { hash, salt } = response;
 
     if (!hash || !salt) {
-        return cb(sendResponse(500, "no hash/salt", "registerUser", null, data.req.signature));
+        return cb(sendResponse(500, "no hash/salt", "registerUser", null));
     }
     data.salt = salt;
 
@@ -180,9 +180,9 @@ const registerUser = async function (data, response, cb) {
     Users.create(createData, (err, res) => {
         if (err) {
             console.error(err);
-            return cb(sendResponse(500, "Something went wrong", "registerUser", null, data.req.signature));
+            return cb(sendResponse(500, "Something went wrong", "registerUser", null));
         }
         data.userDetails = res
-        return cb(null, sendResponse(200, "Email just added in DB!", "registerUser", null, data.req.signature));
+        return cb(null, sendResponse(200, "Email just added in DB!", "registerUser", null));
     })
 }
