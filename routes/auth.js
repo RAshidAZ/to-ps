@@ -7,7 +7,7 @@ const auth = require('../controllers/auth');
 
 
 /* POST user logins. */
-router.post('/v1/user/login', function (req, res, next) {
+router.post('/v1/login', function (req, res, next) {
     let data = req.body;
     // data.req = req.data;
     console.log(data);
@@ -24,7 +24,7 @@ router.post('/v1/user/login', function (req, res, next) {
 });
 
 /* POST user signup. */
-router.post('/v1/user/signup', function (req, res, next) {
+router.post('/v1/signup', function (req, res, next) {
     let data = req.body;
     // data.req = req.data;
     console.log(data);
