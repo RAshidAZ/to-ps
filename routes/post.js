@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 //  Middleware
-const authenticator = require('../middlewares/authenticator')
-const rateLimiter = require('../middlewares/rateLimiter')
+const authenticator = require('../middlewares/authenticator');
+const authenticateRole = require('../middlewares/authenticateRole');
+const rateLimiter = require('../middlewares/rateLimiter');
 
 /* Controllers */
 const post = require('../controllers/post');
@@ -75,7 +76,7 @@ router.patch('/v1/edit', authenticator, function (req, res, next) {
 });
 
 /* Delete a post. */
-router.patch('/v1/delete', authenticator, function (req, res, next) {
+router.patch('/v1/delete', [authenticator, authenticateRole(["ADMIN"])], function (req, res, next) {
     let data = req.body;
     data.authUser = req.authUser;
     data.delete = true;
@@ -92,7 +93,7 @@ router.patch('/v1/delete', authenticator, function (req, res, next) {
 });
 
 /* Edit a post. */
-router.patch('/v1/admin/edit', authenticator, function (req, res, next) {
+router.patch('/v1/admin/edit', [authenticator, authenticateRole(["ADMIN"])], function (req, res, next) {
     let data = req.body;
     data.authUser = req.authUser;
     post.updatePostByAdmin(data, function (err, response) {
