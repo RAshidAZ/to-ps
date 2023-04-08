@@ -36,13 +36,29 @@ const getAllPostList = function (data, response, cb) {
     let findPost = {
         isDelete: false
     }
-    Post.find(findPost, (err, result) => {
-        if (err) {
+    let limit = parseInt(process.env.pageLimit);
+    let skip = 0;
+    if (data.currentPage) {
+        skip = data.currentPage > 0 ? ((data.currentPage - 1) * limit) : 0;
+    }
+    Post.countDocuments(findPost, (errC, count)=>{
+        if (errC) {
             return cb(sendResponse(500, null, "getAllPostList", null));
         }
-        // console.log('-----ß-------------------------------------------------', result);
-        return cb(null, sendResponse(200, "Post found", "getAllPostList", result))
+        if(count >0) {
+            Post.find(findPost).sort({ createdAt: -1 }).skip(skip).limit(limit).exec((err, posts) => {
+                if (err) {
+                    return cb(sendResponse(500, null, "getAllPostList", null));
+                }
+                // console.log('-----ß-------------------------------------------------', result);
+                
+                return cb(null, sendResponse(200, "Post found", "getAllPostList", { posts, count, limit }))
+            })
+        }else{
+            return cb(null, sendResponse(200, "No Post found", "getAllPostList", []))
+        }
     })
+    
 }
 exports.getAllPostList = getAllPostList;
 

@@ -42,13 +42,28 @@ const getAllTodoList = function (data, response, cb) {
         isDelete: false,
         addedBy: data.authUser.id
     }
-    Todo.find(findTodo, (err, result) => {
-        if (err) {
+    let limit = parseInt(process.env.pageLimit);
+    let skip = 0;
+    if (data.currentPage) {
+        skip = data.currentPage > 0 ? ((data.currentPage - 1) * limit) : 0;
+    }
+    Todo.countDocuments(findTodo, (errC, count)=>{
+        if (errC) {
             return cb(sendResponse(500, null, "getAllTodoList", null));
         }
-        // console.log('-----ß-------------------------------------------------', result);
-        return cb(null, sendResponse(200, "Todo found", "getAllTodoList", result))
-    })
+        if(count >0) {
+            Todo.find(findTodo).sort({ createdAt: -1 }).skip(skip).limit(limit).exec((err, todos) => {
+                if (err) {
+                    return cb(sendResponse(500, null, "getAllTodoList", null));
+                }
+                // console.log('-----ß-------------------------------------------------', result);
+                
+                return cb(null, sendResponse(200, "Todo found", "getAllTodoList", { todos, count, limit }))
+            })
+        }else{
+            return cb(null, sendResponse(200, "No Todo found", "getAllTodoList", []))
+        }
+    });
 }
 exports.getAllTodoList = getAllTodoList;
 
