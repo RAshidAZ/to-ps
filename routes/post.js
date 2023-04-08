@@ -58,7 +58,6 @@ router.post('/v1/comment', authenticator, function (req, res, next) {
     });
 });
 
-
 /* Edit a post. */
 router.patch('/v1/edit', authenticator, function (req, res, next) {
     let data = req.body;
@@ -81,6 +80,22 @@ router.patch('/v1/delete', authenticator, function (req, res, next) {
     data.authUser = req.authUser;
     data.delete = true;
     post.updatePost(data, function (err, response) {
+        let status = 0;
+        if (err) {
+            console.log(err);
+            status = err.status;
+            return res.status(status).send(err);
+        }
+        status = response.status;
+        return res.status(status).send(response);
+    });
+});
+
+/* Edit a post. */
+router.patch('/v1/admin/edit', authenticator, function (req, res, next) {
+    let data = req.body;
+    data.authUser = req.authUser;
+    post.updatePostByAdmin(data, function (err, response) {
         let status = 0;
         if (err) {
             console.log(err);

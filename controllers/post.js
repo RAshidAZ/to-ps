@@ -93,7 +93,7 @@ const updatePost = function (data, response, cb) {
     if (!data.postId) {
         return cb(sendResponse(400, "Provide post id", "updatePost", null));
     }
-    let message = "";
+    let message = "Post edited successfully!";
     
     let findPost = {
         _id: data.postId,
@@ -105,7 +105,7 @@ const updatePost = function (data, response, cb) {
 
     if(data.delete){
         updatepost.isDelete = true
-        message = "Post deleted successfully!"
+        message = "Post deleted successfull!"
     }
     if(data.content){
         updatepost.content = data.content
@@ -188,3 +188,38 @@ const addCommentInPost = function (data, response, cb) {
     })
 }
 exports.addCommentInPost = addCommentInPost;
+
+
+const updatePostByAdmin = function (data, response, cb) {
+    if (!cb) {
+        cb = response;
+    }
+    if (!data.postId) {
+        return cb(sendResponse(400, "Provide post id", "updatePostByAdmin", null));
+    }
+    let message = "Post edited successfully by Admin!";
+    
+    let findPost = {
+        _id: data.postId
+    }
+
+    let updatepost = {}
+
+    if(data.delete){
+        updatepost.isDelete = true
+        message = "Post deleted successfully by Admin!"
+    }
+
+    if(data.content){
+        updatepost.content = data.content
+    }
+
+    Post.findOneAndUpdate(findPost, updatepost, (err, result) => {
+        if (err) {
+            return cb(sendResponse(500, null, "updatePostByAdmin", null));
+        }
+        // console.log('-----ß-------------------------------------------------', result);
+        return cb(null, sendResponse(200, message, "updatePostByAdmin", null))
+    })
+}
+exports.updatePostByAdmin = updatePostByAdmin;
