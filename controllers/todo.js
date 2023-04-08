@@ -47,6 +47,12 @@ const getAllTodoList = function (data, response, cb) {
     if (data.currentPage) {
         skip = data.currentPage > 0 ? ((data.currentPage - 1) * limit) : 0;
     }
+    if(data.search){
+        findTodo.title = { $regex : data.search, $options : 'i'}
+    }
+    if(data.completed){
+        findTodo.isCompleted = true;
+    }
     Todo.countDocuments(findTodo, (errC, count)=>{
         if (errC) {
             return cb(sendResponse(500, null, "getAllTodoList", null));
