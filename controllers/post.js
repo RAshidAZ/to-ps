@@ -49,7 +49,28 @@ const getAllPostList = function (data, response, cb) {
             return cb(sendResponse(500, null, "getAllPostList", null));
         }
         if(count >0) {
-            Post.find(findPost).sort({ createdAt: -1 }).skip(skip).limit(limit).exec((err, posts) => {
+            let populateArr = [
+                {
+                    path: 'postedBy',
+                    model: 'user',
+                    select: 'name email'
+                },
+                { 
+                    path: 'comments', 
+                    model: 'comment',
+                    populate: {
+                        path: 'commentedBy',
+                        model: 'user',
+                        select: 'name email'
+                    } 
+                }
+            ]
+            Post.find(findPost)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .populate(populateArr)
+            .exec((err, posts) => {
                 if (err) {
                     return cb(sendResponse(500, null, "getAllPostList", null));
                 }
@@ -127,6 +148,7 @@ const insertCommentInDB = function (data, response, cb) {
     
     let insertComment = {
         comment: data.comment,
+        commentedBy: data.authUser.id
     }
 
     Comment.create(insertComment, (err, result) => {

@@ -172,6 +172,7 @@ const registerUser = async function (data, response, cb) {
 
     let createData = {
         email: data.email,
+        name: data.name,
         password: response.hash,
         salt: response.salt,
         provider: 'email'
