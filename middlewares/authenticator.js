@@ -1,7 +1,6 @@
 const { decryptData, verifyDecryptedData } = require("../helpers/security");
 module.exports = function(req, res, next){
     let token;
-    let authorized = false;
     try {
         if(req.headers['x-access-token'] || req.headers['authorization']){
             token = req.headers['x-access-token'] || req.headers['authorization'];
@@ -19,35 +18,33 @@ module.exports = function(req, res, next){
                         message: 'Unable to decrypt token!'
                     });
                 }
-
+                
                 console.log('Token decrypted successfully');
                 verifyDecryptedData(data, (errV, resV)=>{
-
+                    
                     if(errV){
                         return res.status(403).send({
                             success: false,
                             message: errV.message
                         });
                     }
-
+                    
                     req.authUser = {};
                     req.authUser.id = data.id;
                     req.authUser.email = data.email;
                     req.authUser.role = data.role;
                     req.authUser.name = data.name;
-                    authorized = true;
                     
-                    return next();
+                    next();
                 })
             });
-        }
-        if(!authorized){
+        }else{
             return res.status(401).send({
                 success: false,
-                message: 'Not Authorized'
+                message: 'Not Authorized!'
             });
         }
     } catch (error) {
-        // console.log("error", error);
+        console.log("error", error);
     }
 }

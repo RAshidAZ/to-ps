@@ -17,7 +17,7 @@ const addTodo = function (data, response, cb) {
     for(let i in data.todos) {
         let todo = data.todos[i];
         if(!todo.title){
-            return cb(sendResponse(400, "Provide todo lists", "addTodo", null));
+            return cb(sendResponse(400, "Provide title for all todos", "addTodo", null));
         }
         todo.addedBy = data.authUser.id
         insertTodoLists.push(todo);

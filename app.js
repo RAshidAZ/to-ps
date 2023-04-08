@@ -10,7 +10,12 @@ app.use(bodyParser.urlencoded({
 }));
 
 const auth = require('./routes/auth');
+const post = require('./routes/post');
+const todo = require('./routes/todo');
+
 app.use('/auth', auth);
+app.use('/post', post);
+app.use('/todo', todo);
 
 
 // catch 404 and forward to error handler
